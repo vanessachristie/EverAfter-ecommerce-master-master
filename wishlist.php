@@ -50,6 +50,7 @@ include 'connection.php';
                 </div>
             </div>
         </div>
+        <!-- halo -->
         <!-- listing Area Start -->
         <div class="category-area">
             <div class="container">
