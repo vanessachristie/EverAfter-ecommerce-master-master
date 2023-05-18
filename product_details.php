@@ -231,19 +231,40 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="related-title">Related Products</h2>
+                    
                 </div>
             </div>
             <div class="row">
         <?php
-                // Query untuk mengambil 4 produk terkait secara acak dari kategori yang sama
-                $related_sql = "SELECT DISTINCT product_name, product_id, product_price, product_url,category_id FROM product WHERE  product_name != '".$_SESSION['link_tes']."' GROUP BY product_name ORDER BY RAND() LIMIT 4";
-                // $related_sql = "SELECT DISTINCT product_name, product_id, product_price, product_url,category_id FROM product WHERE  product_name != '".$_SESSION['link_tes']."' and category_id = (select CATEGORY_ID from category where CATEGORY_ID = '{$_SESSION['related_product']}') ORDER BY RAND() LIMIT 4";
+        $related_product_name = $_GET['product_name'] ?? '';
+
+        // Jika nilai $related_product_name tidak kosong, tambahkan ke dalam kondisi WHERE
+        $where_clause = "";
+        if (!empty($related_product_name)) {
+          // Ambil kategori produk yang dipilih
+          $category_id_query = "SELECT category_id FROM product WHERE product_name = '$related_product_name'";
+          $category_id_result = mysqli_query($conn, $category_id_query);
+          $category_id_row = mysqli_fetch_assoc($category_id_result);
+          $category_id = $category_id_row['category_id'];
+        }
+        
+        // Query untuk mengambil 4 produk terkait dari kategori yang sama
+        $related_sql = "SELECT DISTINCT p2.product_name, p2.product_price, p2.product_url, p2.product_detail 
+                        FROM product p1
+                             JOIN product p2 ON p1.category_id = p2.category_id
+                             JOIN category c ON p2.category_id = c.category_id
+                        WHERE 1=1 $where_clause
+                              AND p2.category_id = '$category_id'
+                              
+                        ORDER BY RAND()
+                        LIMIT 4";
+        
                 $related_result = $conn->query($related_sql); 
                      
                 if ($related_result->num_rows > 0) {
                     while ($row_related = $related_result->fetch_assoc()) {
                         $related_product_name = $row_related['product_name'];
-                        $related_product_id = $row_related['product_id'];
+                        // $related_product_id = $row_related['product_id'];
                         $related_product_price = $row_related['product_price'];
                         $related_product_url = $row_related['product_url'];
                         // $category_id = $row['category_id'];
@@ -264,15 +285,13 @@
                                 </div>
                             </div>
                         </div>
-                        
-        
-        <?php
-            }
-        } else {
-            // Tampilkan pesan jika tidak ada produk dengan product_id yang sesuai
-            echo "Product not found";
-        }}}
-        ?>
+                        <?php
+                            }
+                        } else {
+                            // Tampilkan pesan jika tidak ada produk dengan product_id yang sesuai
+                            echo "Product not found";
+                        }}}
+                        ?>
         <style>
           .product-info:hover {
           cursor: pointer;

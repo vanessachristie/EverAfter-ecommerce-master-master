@@ -1,18 +1,25 @@
 <?php
-header("Cache-Control: no-cache, must-revalidate");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 include 'connection.php';
 session_start();
 
-// if (isset($_POST['shopnow'])) {
-//     $shopnow = $_POST['shopnow'];
-//     $_SESSION['shop_now'] = $shopnow;
-// }
-if (isset($_POST['category'])) {
-  $category = $_POST['category'];
-  $_SESSION['category_'] = $category;
+// Menyimpan nilai filter ke dalam session saat filter dipilih
+if (isset($_GET['select2'])) {
+  $_SESSION['selected_category'] = $_GET['select2'];
 }
+
+if (isset($_GET['select3'])) {
+  $_SESSION['selected_size'] = $_GET['select3'];
+}
+
+if (isset($_GET['select4'])) {
+  $_SESSION['selected_price_range'] = $_GET['select4'];
+}
+
+// Mendapatkan nilai filter dari session
+$selected_category = $_SESSION['selected_category'] ?? '';
+$selected_size = $_SESSION['selected_size'] ?? '';
+$selected_price_range = $_SESSION['selected_price_range'] ?? '';
 ?>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -107,75 +114,124 @@ if (isset($_POST['category'])) {
           <!-- single one -->
           <div class="single-listing">
             <!-- Select City items start -->
-            <form method="get">
-              <div class="select-job-items2">
-                <select name="select2">
-                  <option value="">Category</option>
-                  <?php
-                  include 'connection.php';
-                  $sql = "SELECT category_name FROM category";
-                  $result = $conn->query($sql);
-                  if ($result->num_rows > 0) {
-                    $category = array();
-                    while ($row = $result->fetch_assoc()) {
-                      $dt['category_name'] = $row['category_name'];
-                      array_push($category, $dt);
-                    }
-                    $hasil_json = json_encode($category);
-                    $data = json_decode($hasil_json, true);
-                    for ($i = 0; $i < count($data); $i++) { ?>
-                      <option value=""><?php echo $data[$i]["category_name"]; ?></option>
-                    <?php } ?>
-                  <?php } ?>
-                  <?php $conn->close(); ?>
-                </select>
-              </div>
+         
+
+            <form method="get" action="">
+    <div class="select-job-items2">
+        <select name="select2" onchange="this.form.submit()">
+            <option value="">Category</option>
+            <?php
+            include 'connection.php';
+            $sql = "SELECT category_name FROM category";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $category_name = $row['category_name'];
+                    $selected = (isset($_GET['select2']) && $_GET['select2'] === $category_name) ? 'selected' : '';
+                    echo "<option value='$category_name' $selected>$category_name</option>";
+                }
+            }
+            $conn->close();
+            ?>
+        </select>
+    </div>
+
+    <div class="select-job-items2">
+        <select name="select3" onchange="this.form.submit()">
+            <option value="0">Type</option>
+            <option value="S" <?php if(isset($_GET['select3']) && $_GET['select3'] === 'S') echo 'selected'; ?>>S</option>
+            <option value="M" <?php if(isset($_GET['select3']) && $_GET['select3'] === 'M') echo 'selected'; ?>>M</option>
+            <option value="L" <?php if(isset($_GET['select3']) && $_GET['select3'] === 'L') echo 'selected'; ?>>L</option>
+            <option value="All Size" <?php if(isset($_GET['select3']) && $_GET['select3'] === 'All Size') echo 'selected'; ?>>All Size</option>
+        </select>
+    </div>
 
 
-              <div class="select-job-items2">
-                <select name="select3">
-                  <option value="">Type</option>
-                  <option value="">S</option>
-                  <option value="">M</option>
-                  <option value="">L</option>
-                  <option value="">All Size</option>
-                </select>
-              </div>
+    <div class="select-job-items2">
+  <select name="select4"onchange="this.form.submit()">
+    <option value="">Price range</option>
+    <?php
+    include 'connection.php';
 
-              <div class="select-job-items2">
-                <select name="select6">
-                  <option value="">Price range</option>
-                  <?php
-                  include 'connection.php';
+    $sql = "SELECT DISTINCT product_price FROM product ORDER BY product_price ASC";
+    $result = $conn->query($sql);
 
-                  $sql = "SELECT DISTINCT product_price FROM product ORDER BY product_price ASC";
-                  $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+      $price = array();
+      while ($row = $result->fetch_assoc()) {
+        $dt['product_price'] = $row['product_price'];
+        array_push($price, $dt);
+      }
 
-                  if ($result->num_rows > 0) {
-                    $price = array();
-                    while ($row = $result->fetch_assoc()) {
-                      $dt['product_price'] = $row['product_price'];
-                      array_push($price, $dt);
-                    }
+      $hasil_json2 = json_encode($price);
+      $data2 = json_decode($hasil_json2, true);
 
-                    $hasil_json2 = json_encode($price);
-                    $data2 = json_decode($hasil_json2, true);
+      $previous_price = null;
+      foreach ($data2 as $row) {
+        $price = $row['product_price'];
 
-                    foreach ($data2 as $row) {
-                      $price = $row['product_price'];
-                      $price_min = number_format($price, 0, ",", ".");
-                      $price_max = number_format($price + 99999, 0, ",", ".");
-                  ?>
-                      <option value="<?php echo $price . '-' . ($price + 99999); ?>">
-                        <?php echo 'Rp' . $price_min . ' - Rp' . $price_max; ?>
-                      </option>
-                  <?php }
-                  }
-                  $conn->close();
-                  ?>
+        if ($previous_price !== null) {
+          $price_min = number_format($previous_price, 0, ",", ".");
+          $price_max = number_format($price - 1, 0, ",", ".");
+          $price_range = $price_min . '-' . $price_max;
+          $selected = (isset($_GET['select4']) && $_GET['select4'] === $price_range) ? 'selected' : '';
+          echo '<option value="' . $price_range . '" ' . $selected . '>';
+          echo 'Rp' . $price_min . ' - Rp' . $price_max;
+          echo '</option>';
 
-                </select>
-              </div>
+          // Calculate number of intermediate price ranges
+          $num_ranges = ($price - $previous_price - 1) / 100000;
+
+          // Add intermediate price ranges
+          for ($i = 1; $i <= $num_ranges; $i++) {
+            $range_min = number_format($previous_price + ($i * 100000), 0, ",", ".");
+            $range_max = number_format($previous_price + (($i + 1) * 100000) - 1, 0, ",", ".");
+            $range = $range_min . '-' . $range_max;
+            $selected = (isset($_GET['select4']) && $_GET['select4'] === $range) ? 'selected' : '';
+            echo '<option value="' . $range . '" ' . $selected . '>';
+            echo 'Rp' . $range_min . ' - Rp' . $range_max;
+            echo '</option>';
+          }
+        }
+
+        $previous_price = $price;
+      }
+
+      // Handle last price range
+      if ($previous_price !== null) {
+        $price_min = number_format($previous_price, 0, ",", ".");
+        $price_max = number_format($previous_price + 99999, 0, ",", ".");
+        $price_range = $price_min . '-' . $price_max;
+        $selected = (isset($_GET['select4']) && $_GET['select4'] === $price_range) ? 'selected' : '';
+        echo '<option value="' . $price_range . '" ' . $selected . '>';
+        echo 'Rp' . $price_min . ' - Rp' . $price_max;
+        echo '</option>';
+      }
+    }
+    
+    $conn->close();
+    ?>
+  </select>
+</div>
+
+
+
+
+
+
+
+
+
+
+</form>
+
+
+
+
+
+
+         
+             
             </form>
             <!--  Select km items End-->
           </div>
@@ -188,6 +244,7 @@ if (isset($_POST['category'])) {
         <!-- PRODUCT -->
         <div class="new-arrival new-arrival2">
           <div class="row">
+          <br>
 
             <?php
             include 'pagination.php';
@@ -203,23 +260,25 @@ if (isset($_POST['category'])) {
                     echo '<a style="padding-top: 5px;color:black;" href="shop.php?page=' . ($current_page - 1) . '" class="page-btn"><i class="fas fa-chevron-left"></i></a>';
                   }
                   ?>
-                  <div class="page-numbers">
-                    <?php
-                    // Batasi jumlah halaman yang ditampilkan
-                    $max_pages = 5;
-                    $start_page = max($current_page - 2, 1);
-                    $end_page = min($current_page + 2, $total_pages);
-                    // Tampilkan tombol halaman jika masih ada halaman tersedia
-                    for ($i = $start_page; $i <= $end_page; $i++) {
-                      // Highlight tombol halaman saat ini
-                      if ($i == $current_page) {
-                        echo '<a href="#" class="page-numbers current">' . $i . '</a>';
-                      } else {
-                        echo '<a href="shop.php?page=' . $i . '" class="page-numbers">' . $i . '</a>';
-                      }
-                    }
-                    ?>
-
+                  <?php if ($result->num_rows > 0): ?>
+                    <div class="page-numbers">
+                        <?php
+                        // Batasi jumlah halaman yang ditampilkan
+                        $max_pages = 5;
+                        $start_page = max($current_page - 2, 1);
+                        $end_page = min($current_page + 2, $total_pages);
+                        // Tampilkan tombol halaman jika masih ada halaman tersedia
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                          // Highlight tombol halaman saat ini
+                          if ($i == $current_page) {
+                            echo '<a href="#" class="page-numbers current">' . $i . '</a>';
+                          } else {
+                            echo '<a href="shop.php?page=' . $i . '" class="page-numbers">' . $i . '</a>';
+                          }
+                        }
+                        ?>
+                      </div>
+                    <?php endif; ?>
                   </div>
                   <div class="row justify-content-center">
                     <div class="room-btn mb-50">
@@ -938,7 +997,7 @@ if (isset($_POST['category'])) {
 
     $('select[name="select2"]').change(function() {
       // mengambil nilai select option yang dipilih
-      let category = $(this).val();
+      let category = $(this).text();
 
       // memanggil AJAX
       $.ajax({
@@ -1020,6 +1079,14 @@ if (isset($_POST['category'])) {
         }
       });
     });
+
+
+    function updateSelectedText() {
+    var select3 = document.getElementsByName('select3')[0];
+    var selectedText = select3.options[select3.selectedIndex].text;
+    var selectedTextElement = document.getElementById('selected-text');
+    selectedTextElement.textContent = selectedText;
+  }
   </script>
 </body>
 
