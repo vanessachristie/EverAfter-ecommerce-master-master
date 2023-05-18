@@ -112,7 +112,7 @@
           </div>
           <form class="formlogin" action="profile.php">
             <div class="form-group mt-20">
-              <input type="email" class="form-control" id="inputEmail" required placeholder="Username or email address *" aria-describedby="emailHelp">
+              <input type="email" class="form-control" id="inputEmail" required placeholder="Email address *" aria-describedby="emailHelp">
             </div>
             <div class="form-group mt-20">
               <input type="password" class="form-control" required placeholder="Password *" id="inputPassword">
@@ -417,18 +417,12 @@
                 full.style.overflow = 'visible';
                 containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
 
               $(".close.cart").on('click', function(event) {
                 event.preventDefault();
@@ -449,24 +443,11 @@
           
           else if (window.innerWidth < 415) { // media query condition
               navprofile.style.display = 'block';
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              });
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
-              
-              containercart.addEventListener('mouseleave', function(event) {
-                  event.preventDefault();
-                  // containercart.style.display = 'none';
-                  full.style.overflow = 'visible';
-                  containercart.style.animation = 'slideInToRightMobile 1s forwards';
               });
 
               logocartlogin.addEventListener('click', function(event) {
@@ -491,59 +472,45 @@
               });
           } else {
               navprofile.style.display = 'none';
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
 
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
-              
-              containercart.addEventListener('mouseleave', function(event) {
-                  event.preventDefault();
-                  // containercart.style.display = 'none';
-                  full.style.overflow = 'visible';
-                  containercart.style.animation = 'slideInToRightMobile 1s forwards';
-                  if($('.logocart-login').hasClass('active')){
-                    full.style.overflow = 'hidden';
-                    
-                  }
+              $(".close.cart").on('click', function(event) {
+                event.preventDefault();
+                containercart.style.animation = 'slideInToRightMobile 1s forwards';
+                full.style.overflow = 'visible';
+                if($('.logocart-login').hasClass('active')){
+                  full.style.overflow = 'hidden';
+                }
               });
 
               logocartlogin.addEventListener('click', function(event) {
               event.preventDefault();
               full.style.overflow = 'hidden';
               containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              $('.cart-container-login').one('animationend', function() {
-                  $(document).on('click', function(event) {
-                      if ($('.cart-container-login').css('right') === '0px') {
-                      const container = $('.cart-container-login');
-                      const iconcart = $('.logocart-login');
+              // $('.cart-container-login').one('animationend', function() {
+              //     $(document).on('click', function(event) {
+              //         if ($('.cart-container-login').css('right') === '0px') {
+              //         const container = $('.cart-container-login');
+              //         const iconcart = $('.logocart-login');
 
-                      if (!container.is(event.target) && container.has(event.target).length === 0 && !iconcart.is(event.target) && iconcart.has(event.target).length === 0) {
-                          // Click was outside the div, do something here
-                          event.preventDefault();
-                          containercartlogin.style.animation = 'slideInToRightMobile 1s forwards';
-                          isiSignup.style.display = 'none';
-                          login.style.display="block";
-                          full.style.overflow = 'visible';
-                      }
-                      }
-                  });
-              });
+              //         if (!container.is(event.target) && container.has(event.target).length === 0 && !iconcart.is(event.target) && iconcart.has(event.target).length === 0) {
+              //             // Click was outside the div, do something here
+              //             event.preventDefault();
+              //             containercartlogin.style.animation = 'slideInToRightMobile 1s forwards';
+              //             isiSignup.style.display = 'none';
+              //             login.style.display="block";
+              //             full.style.overflow = 'visible';
+              //         }
+              //         }
+              //     });
+              // });
               
               });
-              // navprofile.addEventListener('click', function(event) {
-              // event.preventDefault();
-              // full.style.overflow = 'hidden';
-              // containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              // });
 
               btnclose.addEventListener('click', function(event) {
               event.preventDefault();

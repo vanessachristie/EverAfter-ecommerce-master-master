@@ -158,7 +158,7 @@
           </div>
           <form class="formlogin" action="profile.php">
             <div class="form-group mt-20">
-              <input type="email" class="form-control" id="inputEmail" required placeholder="Username or email address *" aria-describedby="emailHelp">
+              <input type="email" class="form-control" id="inputEmail" required placeholder="Email address *" aria-describedby="emailHelp">
             </div>
             <div class="form-group mt-20">
               <input type="password" class="form-control" required placeholder="Password *" id="inputPassword">

@@ -14,7 +14,9 @@ $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 // Hitung offset
 $offset = ($current_page - 1) * $limit;
-
+if (!isset($_SESSION['shop_now'])) {
+    $_SESSION['shop_now'] = "";
+}
 if ($_SESSION['shop_now'] == "") {
     $selected_category = $_GET['select2'] ?? '';
     $selected_size = $_GET['select3'] ?? '';

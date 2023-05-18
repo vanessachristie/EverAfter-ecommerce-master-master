@@ -334,7 +334,7 @@
                   </div>
                   <div class="popular-caption">
                     <h3>
-                      <a href="product_details.html">Yuna Tweed Crop Top</a>
+                      <a href="product_details.php">Yuna Tweed Crop Top</a>
                     </h3>
                     <span>IDR 230,000</span>
                   </div>
@@ -355,7 +355,7 @@
                   </div>
                   <div class="popular-caption">
                     <h3>
-                      <a href="#">Sunhwa Floral Dress</a>
+                      <a href="product_details.php">Sunhwa Floral Dress</a>
                     </h3>
                     <span>IDR 220,000</span>
                   </div>
@@ -376,7 +376,7 @@
                   </div>
                   <div class="popular-caption">
                     <h3>
-                      <a href="product_details.html"
+                      <a href="product_details.php"
                         >Yerim Scrunch Shoulder Bag</a
                       >
                     </h3>
@@ -398,7 +398,7 @@
                     </div>
                   </div>
                   <div class="popular-caption">
-                    <h3><a href="product_details.html">Meow Beanie</a></h3>
+                    <h3><a href="product_details.php">Meow Beanie</a></h3>
                     <span>IDR 150,000</span>
                   </div>
                 </div>
@@ -431,7 +431,7 @@
                 Trendy Fashion for Women
               </h2>
               <a
-                href="about.html"
+                href="about.php"
                 class="btn wow fadeInUp"
                 data-wow-duration="2s"
                 data-wow-delay=".4s"
@@ -520,7 +520,7 @@
           </div>
           <form class="formlogin" action="profile.php">
             <div class="form-group mt-20">
-              <input type="email" class="form-control" id="inputEmail" required placeholder="Username or email address *" aria-describedby="emailHelp">
+              <input type="email" class="form-control" id="inputEmail" required placeholder="Email address *" aria-describedby="emailHelp">
             </div>
             <div class="form-group mt-20">
               <input type="password" class="form-control" required placeholder="Password *" id="inputPassword">
@@ -623,7 +623,7 @@
                 <div class="single-footer-caption mb-30">
                   <!-- logo -->
                   <div class="footer-logo mb-35">
-                    <a href="index.html"
+                    <a href="index.php"
                       ><img src="assets/images/logo/logo_putih.png" alt=""
                     /></a>
                   </div>
@@ -815,18 +815,12 @@
                 full.style.overflow = 'visible';
                 containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
 
               $(".close.cart").on('click', function(event) {
                 event.preventDefault();
@@ -847,24 +841,11 @@
           
           else if (window.innerWidth < 415) { // media query condition
               navprofile.style.display = 'block';
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              });
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
-              
-              containercart.addEventListener('mouseleave', function(event) {
-                  event.preventDefault();
-                  // containercart.style.display = 'none';
-                  full.style.overflow = 'visible';
-                  containercart.style.animation = 'slideInToRightMobile 1s forwards';
               });
 
               logocartlogin.addEventListener('click', function(event) {
@@ -889,59 +870,45 @@
               });
           } else {
               navprofile.style.display = 'none';
-              logocart.addEventListener('mouseenter', function(event) {
+              logocart.addEventListener('click', function(event) {
                   event.preventDefault();
                   // containercart.style.display = 'block';
                   full.style.overflow = 'hidden';
                   containercart.style.animation = 'slideInFromRightMobile 0.5s forwards';
               });
 
-              // logocartlogin.addEventListener('mouseenter', function(event) {
-              //     event.preventDefault();
-              //     // containercart.style.display = 'none';
-              //     full.style.overflow = 'visible';
-              //     containercart.style.animation = 'slideInToRightMobile 1s forwards';
-              // });
-              
-              containercart.addEventListener('mouseleave', function(event) {
-                  event.preventDefault();
-                  // containercart.style.display = 'none';
-                  full.style.overflow = 'visible';
-                  containercart.style.animation = 'slideInToRightMobile 1s forwards';
-                  if($('.logocart-login').hasClass('active')){
-                    full.style.overflow = 'hidden';
-                    
-                  }
+              $(".close.cart").on('click', function(event) {
+                event.preventDefault();
+                containercart.style.animation = 'slideInToRightMobile 1s forwards';
+                full.style.overflow = 'visible';
+                if($('.logocart-login').hasClass('active')){
+                  full.style.overflow = 'hidden';
+                }
               });
 
               logocartlogin.addEventListener('click', function(event) {
               event.preventDefault();
               full.style.overflow = 'hidden';
               containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              $('.cart-container-login').one('animationend', function() {
-                  $(document).on('click', function(event) {
-                      if ($('.cart-container-login').css('right') === '0px') {
-                      const container = $('.cart-container-login');
-                      const iconcart = $('.logocart-login');
+              // $('.cart-container-login').one('animationend', function() {
+              //     $(document).on('click', function(event) {
+              //         if ($('.cart-container-login').css('right') === '0px') {
+              //         const container = $('.cart-container-login');
+              //         const iconcart = $('.logocart-login');
 
-                      if (!container.is(event.target) && container.has(event.target).length === 0 && !iconcart.is(event.target) && iconcart.has(event.target).length === 0) {
-                          // Click was outside the div, do something here
-                          event.preventDefault();
-                          containercartlogin.style.animation = 'slideInToRightMobile 1s forwards';
-                          isiSignup.style.display = 'none';
-                          login.style.display="block";
-                          full.style.overflow = 'visible';
-                      }
-                      }
-                  });
-              });
+              //         if (!container.is(event.target) && container.has(event.target).length === 0 && !iconcart.is(event.target) && iconcart.has(event.target).length === 0) {
+              //             // Click was outside the div, do something here
+              //             event.preventDefault();
+              //             containercartlogin.style.animation = 'slideInToRightMobile 1s forwards';
+              //             isiSignup.style.display = 'none';
+              //             login.style.display="block";
+              //             full.style.overflow = 'visible';
+              //         }
+              //         }
+              //     });
+              // });
               
               });
-              // navprofile.addEventListener('click', function(event) {
-              // event.preventDefault();
-              // full.style.overflow = 'hidden';
-              // containercartlogin.style.animation = 'slideInFromRightMobile 0.5s forwards';
-              // });
 
               btnclose.addEventListener('click', function(event) {
               event.preventDefault();
@@ -1021,6 +988,21 @@
             data: { shopnow: "" },
             success: function() {
               console.log("Data berhasil dikirim ke PHP yyyyyyyyyyyyyy");
+            }
+          });
+        });
+
+        $('h3 a').click(function() {
+          // Mengambil isi dari elemen a yang diklik
+          let isiLink = $(this).text();
+          $.ajax({
+            type: "POST",
+            url: "product_details.php",
+            data: {
+              link: isiLink
+            },
+            success: function() {
+              console.log("Data berhasil dikirim ke PHP");
             }
           });
         });
